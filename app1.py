@@ -3,6 +3,8 @@ import pandas as pd
 import sqlite3
 from datetime import date, time
 import openpyxl
+import uuid
+from datetime import date
 
 st.set_page_config(page_title="EDC Form", layout="wide")
 
@@ -16,20 +18,24 @@ st.header("Demographic Information")
 col1, col2 = st.columns(2)
 
 with col1:
-    unique_id = st.number_input(
+    if "unique_id" not in st.session_state:
+        st.session_state.unique_id = str(uuid.uuid4())[:8].upper()
+
+    unique_id = st.text_input(
         "1. Unique Identifier",
-        min_value=0,
-        step=1
-    )
+        value=st.session_state.unique_id,
+        disabled=True
+        )
 
-    dob = st.date_input(
-        "2. Date of Birth"
-    )
+    dob = st.date_input("2. Date of Birth")
+    today = date.today()
 
-    age = st.number_input(
-        "3. Age",
-        min_value=0,
-        step=1
+    age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+
+    st.number_input(
+    "3. Age",
+    value=age,
+    disabled=False
     )
 
 with col2:
@@ -38,12 +44,29 @@ with col2:
         ["", "Male", "Female", "Other"]
     )
 
-    race = st.text_input(
-        "5. Race"
+    race = st.multiselect(
+        "5. Race (Select all that apply)",
+        [
+            "American Indian or Alaska Native",
+            "Asian",
+            "Black or African American",
+            "Native Hawaiian or Other Pacific Islander",
+            "White",
+            "Some Other Race",
+            "Unknown",
+            "Prefer Not to Answer"
+        ]
     )
 
-    ethnicity = st.text_input(
-        "6. Ethnicity"
+    ethnicity = st.selectbox(
+    "6. Ethnicity",
+    [
+    "",
+    "Hispanic or Latino",
+    "Not Hispanic or Latino",
+    "Unknown",
+    "Prefer Not to Answer"
+    ]
     )
 
 # --------------------------------------------------
@@ -51,7 +74,28 @@ with col2:
 # --------------------------------------------------
 st.header("Sample Information")
 
-tube_type = st.text_input("7. Tube Type")
+tube_type = st.selectbox(
+    "7. Tube Type",
+    [
+        "",
+        "Serum Separator Tube (SST, Gold/Tiger Top)",
+        "Serum Tube (Red Top)",
+        "K2 EDTA (Lavender Top)",
+        "K3 EDTA (Lavender Top)",
+        "Lithium Heparin PST (Light Green Top)",
+        "Lithium Heparin (Green Top)",
+        "Sodium Heparin (Green Top)",
+        "Sodium Citrate 3.2% (Light Blue Top)",
+        "Fluoride/Oxalate (Gray Top)",
+        "PAXgene RNA Tube",
+        "PAXgene DNA Tube",
+        "BD Barricor Plasma Tube",
+        "CPT Cell Preparation Tube",
+        "Microtainer EDTA",
+        "Microtainer Serum",
+        "Other"
+    ]
+)
 
 draw_date = st.date_input(
     "8. Draw Date",
@@ -80,12 +124,15 @@ g_minutes = st.selectbox(
 
 centrifugation_speed = st.number_input(
     "13. Centrifugation Speed (RPM/RCF)",
-    min_value=0.0
+    min_value=0,
+    step=1,
+    format="%d"
 )
 
 centrifugation_duration = st.number_input(
     "14. Centrifugation Duration (minutes)",
-    min_value=0.0
+    min_value=0,
+    format="%d"
 )
 
 freeze_date = st.date_input(
@@ -137,9 +184,8 @@ test_completion_time = st.time_input(
     value=None
 )
 
-reported_result = st.number_input(
-    "24. Reported Result",
-    format="%.4f"
+reported_result = st.text_input(
+    "24. Reported Result"
 )
 
 result_units = st.text_input(
