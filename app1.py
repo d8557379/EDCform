@@ -28,7 +28,10 @@ with col1:
         )
 
     dob = st.date_input("2. Date of Birth",
-                        format="MM/DD/YYYY")
+                        format="MM/DD/YYYY",
+                        value=date(1980, 1, 1),
+                        min_value=date(1900, 1, 1),
+                        max_value=date.today())
     today = date.today()
 
     age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
