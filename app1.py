@@ -55,7 +55,8 @@ with col2:
             "Some Other Race",
             "Unknown",
             "Prefer Not to Answer"
-        ]
+        ],
+        max_selections=3
     )
 
     ethnicity = st.selectbox(
