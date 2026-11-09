@@ -27,7 +27,8 @@ with col1:
         disabled=True
         )
 
-    dob = st.date_input("2. Date of Birth")
+    dob = st.date_input("2. Date of Birth",
+                        format="MM/DD/YYYY")
     today = date.today()
 
     age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
@@ -100,22 +101,26 @@ tube_type = st.selectbox(
 
 draw_date = st.date_input(
     "8. Draw Date",
+    format="MM/DD/YYYY",
     key="draw_date"
 )
 
 draw_time = st.time_input(
     "9. Draw Time",
-    value=None
+    value=time(0, 0, 0),
+    step=1
 )
 
 centrifugation_date = st.date_input(
-    "10. Centrifugation Date"
+    "10. Centrifugation Date",
+    format="MM/DD/YYYY",
 )
 
 centrifugation_time = st.time_input(
     "11. Centrifugation Time",
     key="centrifugation_time",
-    value=None
+    value=time(0, 0, 0),
+    step=1
 )
 
 g_minutes = st.selectbox(
@@ -137,13 +142,15 @@ centrifugation_duration = st.number_input(
 )
 
 freeze_date = st.date_input(
-    "15. Freeze Date"
+    "15. Freeze Date",
+        format="MM/DD/YYYY",    
 )
 
 freeze_time = st.time_input(
     "16. Freeze Time",
     key="freeze_time",
-    value=None
+    value=time(0, 0, 0),
+    step=1
 )
 
 num_aliquots = st.number_input(
@@ -176,13 +183,15 @@ sid = st.text_input(
 )
 
 test_completion_date = st.date_input(
-    "22. Test Completion Date"
+    "22. Test Completion Date",
+    format="MM/DD/YYYY", 
 )
 
 test_completion_time = st.time_input(
     "23. Test Completion Time",
     key="completion_time",
-    value=None
+    value=time(0, 0, 0),
+    step=1
 )
 
 reported_result = st.text_input(
